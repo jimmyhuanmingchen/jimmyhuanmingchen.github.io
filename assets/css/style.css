@@ -214,6 +214,10 @@ h3 {
   font-style: normal;
 }
 
+.profile-sidebar .postal-address {
+  margin-top: 20px;
+}
+
 .profile-sidebar address strong,
 .profile-sidebar h2 {
   display: block;
@@ -807,8 +811,12 @@ h3 {
   }
 
   .portrait-frame {
-    grid-row: 1 / span 2;
+    grid-row: 1 / span 3;
     margin: 0;
+  }
+
+  .profile-sidebar .postal-address {
+    margin-top: 0;
   }
 
   .side-links {
@@ -1033,6 +1041,10 @@ h3 {
 
   .profile-sidebar address {
     margin-bottom: 18px;
+  }
+
+  .profile-sidebar .postal-address {
+    margin-top: 18px;
   }
 
   .research-card-media {
