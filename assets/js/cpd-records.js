@@ -84,6 +84,21 @@ function setMessage(element, message, isError = false) {
   element.classList.toggle("is-error", isError);
 }
 
+function normalizeCpdDate(value) {
+  return value.replace(
+    /\b(20\d{2})\.(0?[1-9]|1[0-2])\.(0?[1-9]|[12]\d|3[01])\b/g,
+    (_, year, month, day) => `${year}.${Number(month)}.${Number(day)}`
+  );
+}
+
+function normalizeCpdDates(data) {
+  data.records = data.records.map((record) => ({
+    ...record,
+    date: normalizeCpdDate(record.date)
+  }));
+  return data;
+}
+
 function renderYearSummary(records) {
   const hoursByYear = new Map();
   for (const record of records) {
@@ -226,6 +241,8 @@ async function unlockRecords(passcode) {
     migrationMessage = "The browser copy could not be opened, so the published records were loaded.";
   }
 
+  cpdData = normalizeCpdDates(cpdData);
+
   activePasscode = passcode;
   if (migrationMessage) {
     const encrypted = await encryptPayload(cpdData, activePasscode);
@@ -279,7 +296,7 @@ async function importBackup(file) {
     title: typeof imported.title === "string" ? imported.title : "CPD Full Records",
     sourcePages: typeof imported.sourcePages === "string" ? imported.sourcePages : "User backup",
     records: imported.records.map((record) => ({
-      date: record.date,
+      date: normalizeCpdDate(record.date),
       activity: record.activity,
       hours: String(record.hours)
     }))
@@ -318,7 +335,7 @@ editorForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const index = Number.parseInt(editIndexInput.value, 10);
   const record = {
-    date: editDateInput.value.trim(),
+    date: normalizeCpdDate(editDateInput.value.trim()),
     activity: editActivityInput.value.trim(),
     hours: editHoursInput.value.trim()
   };
