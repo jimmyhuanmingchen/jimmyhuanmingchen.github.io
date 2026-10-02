@@ -93,7 +93,7 @@ function renderYearSummary(records) {
   }
 
   summary.replaceChildren();
-  for (let year = 2021; year <= 2026; year += 1) {
+  for (let year = 2022; year <= 2026; year += 1) {
     const item = document.createElement("span");
     item.className = "cpd-year-stat";
 

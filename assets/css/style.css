@@ -873,7 +873,7 @@ h3 {
 .cpd-year-summary {
   margin-top: 14px;
   display: grid;
-  grid-template-columns: repeat(6, minmax(92px, 1fr));
+  grid-template-columns: repeat(5, minmax(92px, 1fr));
   gap: 8px;
 }
 
