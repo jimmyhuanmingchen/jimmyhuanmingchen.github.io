@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <meta name="description" content="Password-protected continuing professional development records for Dr Jimmy Huanming Chen.">
+    <title>CPD Records | Jimmy (Huanming) Chen</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/cpd-records.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="brand-row">
+          <a class="brand-name" href="index.html">Jimmy (Huanming) Chen</a>
+          <span class="brand-credentials">DPhil, CEng, CSci, FIMMM, FRSA, FHEA</span>
+        </div>
+        <nav class="primary-nav" aria-label="Main navigation">
+          <a href="index.html">Home</a>
+          <a href="research.html">Research</a>
+          <a href="publications.html">Publications</a>
+          <a href="cv.html" aria-current="page">Academic CV</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page cpd-page" id="content">
+      <header class="page-heading">
+        <h1>CPD Records</h1>
+        <p>Personal continuing professional development records covering the source document’s pages 4–8.</p>
+      </header>
+
+      <section class="cpd-lock-panel" id="cpd-lock-panel" aria-labelledby="cpd-access-title">
+        <h2 id="cpd-access-title">Enter passcode</h2>
+        <p>Enter the six-digit passcode to decrypt and view the records.</p>
+        <form id="cpd-login-form" autocomplete="off">
+          <label for="cpd-passcode">Six-digit passcode</label>
+          <div class="cpd-login-row">
+            <input id="cpd-passcode" name="passcode" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="current-password" required>
+            <button class="cpd-button" type="submit">Unlock records</button>
+          </div>
+          <p class="cpd-form-message" id="cpd-login-message" role="alert" aria-live="polite"></p>
+        </form>
+        <p class="cpd-security-note">This encrypted static-page gate discourages casual access, but it is not equivalent to server-side authentication.</p>
+      </section>
+
+      <section id="cpd-workspace" hidden aria-labelledby="cpd-workspace-title">
+        <div class="cpd-workspace-heading">
+          <div>
+            <h2 id="cpd-workspace-title">Continuing professional development</h2>
+            <p id="cpd-summary"></p>
+          </div>
+          <button class="cpd-button cpd-button-secondary" id="cpd-lock-button" type="button">Lock page</button>
+        </div>
+
+        <p class="cpd-local-note"><strong>Storage note:</strong> edits are encrypted and saved only in this browser. They do not sync to another browser, device, or the published GitHub site. Export a backup after making changes.</p>
+
+        <div class="cpd-toolbar" aria-label="CPD record controls">
+          <label class="cpd-search-label" for="cpd-search">
+            <span>Search records</span>
+            <input id="cpd-search" type="search" placeholder="Search by date, activity, category or hours">
+          </label>
+          <div class="cpd-actions">
+            <button class="cpd-button" id="cpd-add-button" type="button">Add record</button>
+            <button class="cpd-button cpd-button-secondary" id="cpd-export-button" type="button">Export backup</button>
+            <label class="cpd-button cpd-button-secondary cpd-file-button" for="cpd-import-input">Import backup</label>
+            <input id="cpd-import-input" class="cpd-file-input" type="file" accept="application/json,.json">
+          </div>
+        </div>
+
+        <p class="cpd-form-message" id="cpd-status-message" role="status" aria-live="polite"></p>
+
+        <div class="cpd-table-wrap">
+          <table class="cpd-table">
+            <caption>Continuing professional development records</caption>
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">CPD activity and learning record</th>
+                <th scope="col">Hours</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="cpd-table-body"></tbody>
+          </table>
+        </div>
+        <p id="cpd-empty-message" hidden>No records match the current search.</p>
+
+        <dialog class="cpd-dialog" id="cpd-editor-dialog">
+          <form id="cpd-editor-form">
+            <div class="cpd-dialog-heading">
+              <h2 id="cpd-editor-title">Add CPD record</h2>
+              <button class="cpd-icon-button" id="cpd-dialog-close" type="button" aria-label="Close editor">×</button>
+            </div>
+            <input id="cpd-edit-index" type="hidden">
+            <label for="cpd-edit-date">Date</label>
+            <input id="cpd-edit-date" type="text" required placeholder="YYYY.MM.DD">
+            <label for="cpd-edit-activity">CPD activity and learning record</label>
+            <textarea id="cpd-edit-activity" rows="10" required></textarea>
+            <label for="cpd-edit-hours">Hours</label>
+            <input id="cpd-edit-hours" type="number" min="0" step="0.5" required>
+            <div class="cpd-dialog-actions">
+              <button class="cpd-button cpd-button-secondary" id="cpd-editor-cancel" type="button">Cancel</button>
+              <button class="cpd-button" type="submit">Save record</button>
+            </div>
+          </form>
+        </dialog>
+      </section>
+
+      <noscript><p class="cpd-local-note">JavaScript is required to decrypt and manage these records.</p></noscript>
+    </main>
+
+    <footer class="site-footer">
+      <div><p>© 2026 Jimmy (Huanming) Chen</p><p><a href="cv.html">Academic CV</a></p></div>
+    </footer>
+  </body>
+</html>
