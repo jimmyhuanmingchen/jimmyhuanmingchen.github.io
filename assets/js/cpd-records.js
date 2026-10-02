@@ -84,8 +84,29 @@ function setMessage(element, message, isError = false) {
   element.classList.toggle("is-error", isError);
 }
 
-function totalHours(records) {
-  return records.reduce((total, record) => total + (Number.parseFloat(record.hours) || 0), 0);
+function renderYearSummary(records) {
+  const hoursByYear = new Map();
+  for (const record of records) {
+    const year = record.date.match(/^(20\d{2})/)?.[1];
+    if (!year) continue;
+    hoursByYear.set(year, (hoursByYear.get(year) || 0) + (Number.parseFloat(record.hours) || 0));
+  }
+
+  summary.replaceChildren();
+  for (let year = 2021; year <= 2026; year += 1) {
+    const item = document.createElement("span");
+    item.className = "cpd-year-stat";
+
+    const yearLabel = document.createElement("strong");
+    yearLabel.textContent = String(year);
+
+    const hoursLabel = document.createElement("span");
+    const hours = hoursByYear.get(String(year)) || 0;
+    hoursLabel.textContent = `${hours.toLocaleString("en-GB")} CPD hours`;
+
+    item.append(yearLabel, hoursLabel);
+    summary.append(item);
+  }
 }
 
 function mergePublishedUpdate(savedData, publishedData) {
@@ -144,9 +165,7 @@ function renderRecords() {
     tableBody.append(row);
   }
 
-  const count = cpdData.records.length;
-  const hours = totalHours(cpdData.records);
-  summary.textContent = `${count} records · ${hours.toLocaleString("en-GB")} total hours`;
+  renderYearSummary(cpdData.records);
   emptyMessage.hidden = visibleRecords.length !== 0;
 }
 

@@ -870,6 +870,37 @@ h3 {
   gap: 24px;
 }
 
+.cpd-year-summary {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(92px, 1fr));
+  gap: 8px;
+}
+
+.cpd-year-stat {
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.cpd-year-stat strong,
+.cpd-year-stat span {
+  display: block;
+}
+
+.cpd-year-stat strong {
+  margin-bottom: 2px;
+  color: var(--heading);
+  font-size: 0.86rem;
+}
+
+.cpd-year-stat span {
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
 .cpd-toolbar {
   margin: 26px 0 8px;
   display: flex;
@@ -1436,8 +1467,18 @@ h3 {
     margin-top: 8px;
   }
 
+  .cpd-year-summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .cpd-dialog {
     padding: 20px 16px;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .cpd-year-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
