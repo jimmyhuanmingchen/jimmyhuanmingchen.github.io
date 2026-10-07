@@ -6,8 +6,8 @@
     <meta name="robots" content="noindex, nofollow, noarchive">
     <meta name="description" content="Password-protected continuing professional development records for Dr Jimmy Huanming Chen.">
     <title>CPD Records | Jimmy (Huanming) Chen</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <script src="assets/js/cpd-records.js?v=20261002-2" defer></script>
+    <link rel="stylesheet" href="assets/css/style.css?v=20261007-1">
+    <script src="assets/js/cpd-records.js?v=20261007-2" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
@@ -50,7 +50,7 @@
         <div class="cpd-workspace-heading">
           <div>
             <h2 id="cpd-workspace-title">Continuing professional development</h2>
-            <div class="cpd-year-summary" id="cpd-summary" aria-label="CPD hours by year"></div>
+            <div class="cpd-year-summary" id="cpd-summary" aria-label="Total CPD hours and CPD hours by year"></div>
           </div>
           <button class="cpd-button cpd-button-secondary" id="cpd-lock-button" type="button">Lock page</button>
         </div>
@@ -77,7 +77,11 @@
             <caption>Continuing professional development records</caption>
             <thead>
               <tr>
-                <th scope="col">Date</th>
+                <th scope="col" id="cpd-date-heading" aria-sort="descending">
+                  <button class="cpd-sort-button" id="cpd-date-sort" type="button" aria-label="Sort by date, currently newest first">
+                    Date <span aria-hidden="true">↓</span>
+                  </button>
+                </th>
                 <th scope="col">CPD activity and learning record</th>
                 <th scope="col">Hours</th>
                 <th scope="col">Actions</th>

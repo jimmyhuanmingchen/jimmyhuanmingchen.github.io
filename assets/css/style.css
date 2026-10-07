@@ -873,7 +873,7 @@ h3 {
 .cpd-year-summary {
   margin-top: 14px;
   display: grid;
-  grid-template-columns: repeat(5, minmax(92px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 8px;
 }
 
@@ -882,6 +882,11 @@ h3 {
   padding: 9px 11px;
   border: 1px solid var(--line);
   background: #fff;
+}
+
+.cpd-total-stat {
+  border-color: var(--accent);
+  background: var(--soft);
 }
 
 .cpd-year-stat strong,
@@ -976,6 +981,30 @@ h3 {
   font-size: 0.78rem;
   letter-spacing: 0.025em;
   text-transform: uppercase;
+}
+
+.cpd-sort-button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.cpd-sort-button:hover,
+.cpd-sort-button:focus-visible {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.cpd-sort-button span {
+  display: inline-block;
+  margin-left: 3px;
+  font-size: 1rem;
+  line-height: 0;
 }
 
 .cpd-table th:first-child {

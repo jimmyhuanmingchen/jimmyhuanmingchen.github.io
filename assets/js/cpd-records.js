@@ -10,6 +10,8 @@ const loginMessage = document.querySelector("#cpd-login-message");
 const workspace = document.querySelector("#cpd-workspace");
 const summary = document.querySelector("#cpd-summary");
 const searchInput = document.querySelector("#cpd-search");
+const dateHeading = document.querySelector("#cpd-date-heading");
+const dateSortButton = document.querySelector("#cpd-date-sort");
 const tableBody = document.querySelector("#cpd-table-body");
 const emptyMessage = document.querySelector("#cpd-empty-message");
 const statusMessage = document.querySelector("#cpd-status-message");
@@ -23,6 +25,7 @@ const editHoursInput = document.querySelector("#cpd-edit-hours");
 
 let activePasscode = "";
 let cpdData = null;
+let dateSortDirection = "desc";
 
 function bytesToBase64(bytes) {
   let binary = "";
@@ -96,31 +99,66 @@ function normalizeCpdDates(data) {
     ...record,
     date: normalizeCpdDate(record.date)
   }));
+  sortRecordsByDate(data.records);
   return data;
+}
+
+function cpdDateValue(value) {
+  const match = normalizeCpdDate(value).match(/^(20\d{2})\.(\d{1,2})\.(\d{1,2})$/);
+  if (!match) return Number.NEGATIVE_INFINITY;
+
+  const [, year, month, day] = match;
+  return Number(year) * 10000 + Number(month) * 100 + Number(day);
+}
+
+function sortRecordsByDate(records) {
+  records.sort((first, second) => cpdDateValue(second.date) - cpdDateValue(first.date));
+}
+
+function updateDateSortButton() {
+  const newestFirst = dateSortDirection === "desc";
+  dateHeading.setAttribute("aria-sort", newestFirst ? "descending" : "ascending");
+  dateSortButton.setAttribute(
+    "aria-label",
+    `Sort by date, currently ${newestFirst ? "newest" : "oldest"} first`
+  );
+  dateSortButton.querySelector("span").textContent = newestFirst ? "↓" : "↑";
 }
 
 function renderYearSummary(records) {
   const hoursByYear = new Map();
+  let totalHours = 0;
+
   for (const record of records) {
+    const hours = Number.parseFloat(record.hours) || 0;
+    totalHours += hours;
+
     const year = record.date.match(/^(20\d{2})/)?.[1];
     if (!year) continue;
-    hoursByYear.set(year, (hoursByYear.get(year) || 0) + (Number.parseFloat(record.hours) || 0));
+    hoursByYear.set(year, (hoursByYear.get(year) || 0) + hours);
   }
 
   summary.replaceChildren();
-  for (let year = 2022; year <= 2026; year += 1) {
+
+  function addSummaryItem(label, hours, className = "") {
     const item = document.createElement("span");
-    item.className = "cpd-year-stat";
+    item.className = `cpd-year-stat ${className}`.trim();
 
     const yearLabel = document.createElement("strong");
-    yearLabel.textContent = String(year);
+    yearLabel.textContent = label;
 
     const hoursLabel = document.createElement("span");
-    const hours = hoursByYear.get(String(year)) || 0;
     hoursLabel.textContent = `${hours.toLocaleString("en-GB")} CPD hours`;
 
     item.append(yearLabel, hoursLabel);
     summary.append(item);
+  }
+
+  addSummaryItem("Total", totalHours, "cpd-total-stat");
+
+  const years = [...hoursByYear.keys()].sort((first, second) => Number(second) - Number(first));
+  for (const year of years) {
+    addSummaryItem(year, hoursByYear.get(year));
   }
 }
 
@@ -150,7 +188,11 @@ function renderRecords() {
     .map((record, index) => ({ record, index }))
     .filter(({ record }) =>
       [record.date, record.activity, record.hours].join(" ").toLowerCase().includes(query)
-    );
+    )
+    .sort((first, second) => {
+      const difference = cpdDateValue(second.record.date) - cpdDateValue(first.record.date);
+      return dateSortDirection === "desc" ? difference : -difference;
+    });
 
   tableBody.replaceChildren();
 
@@ -189,6 +231,7 @@ function renderRecords() {
   }
 
   renderYearSummary(cpdData.records);
+  updateDateSortButton();
   emptyMessage.hidden = visibleRecords.length !== 0;
 }
 
@@ -310,7 +353,9 @@ async function importBackup(file) {
     }))
   };
 
-  await saveRecords("Backup imported and encrypted in this browser.");
+  sortRecordsByDate(cpdData.records);
+
+  await saveRecords("Backup imported, sorted by date and encrypted in this browser.");
   renderRecords();
 }
 
@@ -333,6 +378,10 @@ loginForm.addEventListener("submit", async (event) => {
 });
 
 searchInput.addEventListener("input", renderRecords);
+dateSortButton.addEventListener("click", () => {
+  dateSortDirection = dateSortDirection === "desc" ? "asc" : "desc";
+  renderRecords();
+});
 document.querySelector("#cpd-add-button").addEventListener("click", () => openEditor());
 document.querySelector("#cpd-lock-button").addEventListener("click", lockRecords);
 document.querySelector("#cpd-export-button").addEventListener("click", exportBackup);
@@ -351,11 +400,13 @@ editorForm.addEventListener("submit", async (event) => {
   if (!record.date || !record.activity || !record.hours) return;
 
   if (index >= 0) cpdData.records[index] = record;
-  else cpdData.records.unshift(record);
+  else cpdData.records.push(record);
+
+  sortRecordsByDate(cpdData.records);
 
   await saveRecords(index >= 0
-    ? "Record updated and encrypted changes saved in this browser."
-    : "Record added and encrypted changes saved in this browser.");
+    ? "Record updated, sorted by date and encrypted changes saved in this browser."
+    : "Record added, sorted by date and encrypted changes saved in this browser.");
   editorDialog.close();
   renderRecords();
 });
